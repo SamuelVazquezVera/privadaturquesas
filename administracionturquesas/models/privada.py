@@ -1,3 +1,0 @@
-from administracionturquesas import db
-
-
