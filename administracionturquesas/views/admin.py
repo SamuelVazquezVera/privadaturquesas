@@ -54,11 +54,17 @@ def registrarAdministradores():
         elif tipousuario == 'administrador':
             administrador = True
 
-        user = Usuario(nombrePropietario, password, telefono, esPrimeraVez,
+        userToAdd = Usuario.query.get_or_404(telefono=telefono).first()
+        if userToAdd is None:
+            user = Usuario(nombrePropietario, password, telefono, esPrimeraVez,
                        administrador, moroso, seguridad, calle, privada, vivienda, email)
-        db.session.add(user)
-        db.session.commit()
-        flash('Usuario agregado')
+            db.session.add(user)
+            db.session.commit()
+            flash('Usuario agregado')
+           
+        else:
+            flash('El numero telefonico ya existe en la base de datos')
+        
         
         return render_template('auth/administrador.html')
     else:
@@ -74,7 +80,7 @@ def registrarUsuario():
         moroso = False
         administrador = False
         seguridad = False
-
+        privada = Privada.query.filter_by(id=g.user.idPrivada).first()
         nombrePropietario = request.form.get('nombre')
         password = generate_password_hash("123456")
         telefono = request.form.get('telefono')
@@ -98,13 +104,17 @@ def registrarUsuario():
             seguridad = True
         elif tipousuario == 'administrador':
             administrador = True
-
-        user = Usuario(nombrePropietario, password, telefono, esPrimeraVez,
-                       administrador, moroso, seguridad, calle, g.user.idPrivada, vivienda, email)
-        db.session.add(user)
-        db.session.commit()
-        flash('Usuario agregado')
-        privada = Privada.query.filter_by(id=g.user.idPrivada).first()
+        
+        userToAdd = Usuario.query.get_or_404(telefono=telefono).first()
+        if userToAdd is None:
+            user = Usuario(nombrePropietario, password, telefono, esPrimeraVez,
+                        administrador, moroso, seguridad, calle, g.user.idPrivada, vivienda, email)
+            db.session.add(user)
+            db.session.commit()
+            flash('Usuario agregado')
+        else:
+            flash('El numero telefonico ya existe en la base de datos')
+        
         return render_template('admin/registrarusuario.html', privada=privada)
     else:
         if g.user and g.user.esAdministrador:
