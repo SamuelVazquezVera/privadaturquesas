@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row row-cols-1 row-cols-md-4 g-3 mt-4 p-5">
+    <div class="col-sm-5">
+        <div class="card card-body">
+            <form action="" method="POST"> 
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />                                
+                <div class="form-group">
+                    <select id="privada" name="privada" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                        <option selected>privada</option>
+                        <option value="1">Privada Central</option>
+                        <option value="2">Ontario</option>
+                        <option value="3">Maracaibo</option>
+                        <option value="4">Baikal</option>
+                        <option value="5">Michigan</option>
+                        <option value="6">Chad</option>
+                        <option value="7">Sayula</option>
+                        <option value="8">Zirahuen</option>
+                        <option value="9">Huron</option>
+                        <option value="10">Victoria</option>
+                        <option value="11">Del Carmen</option>
+                        <option value="12">Miramar</option>
+                        <option value="13">La Joya</option>
+                        <option value="14">Bacalar</option>
+                        <option value="15">Coyuca</option>
+                        <option value="16">Nichupte</option>
+                      </select>
+                </div>
+                <br>  
+                <div class="form-group">
+                    <select id="calle" name="calle"  disabled class="form-select form-select-sm" aria-label=".form-select-sm example">
+                        <option selected>Calle</option>
+                        <option value="1">Agua Grande</option>
+                        <option value="2">Chautengo</option>
+                        <option value="3">Cuyutlan</option>
+                        <option value="4">Mitla</option>
+                        <option value="5">Chavel</option>
+                        <option value="6">Brizola</option>
+                        <option value="7">Yalca</option>
+                        <option value="8">Zempoala</option>                        
+                      </select>
+                </div>
+                <br>             
+                <div class="form-group">
+                    <input type="text" disabled name="vivienda" id="vivienda" placeholder="Casa" class="form-control"
+                        autocomplete="off" style="text-align:center" autofocus onkeypress="return valideKey(event);">
+                </div>
+                
+                <div class="form-group">
+                    <button class="btn btn-outline-primary g-4 mt-4 ">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% for pase in pases %}
+    <div class="col">
+        <div class="card border-primary mb-3" style="max-width: 18rem;">
+            <div class="card-header bg-transparent border-success">Privada: {{get_privada(pase.idPrivada).nombre}} Calle: {{get_calle(pase.calle)}}
+                Número: {{pase.vivienda}}</div>
+            <div class="card-body text-primary">
+                <h5 class="card-title">Propietario: {{pase.nombrepropietario}}</h5>
+                {% if pase.moroso %}
+                <h4 class="card-title mb-2" style="color:#FF0000">Moroso: Si</h4>
+                <p class="card-subtitle mb-2 " style="color:#FF0000">Se debe de brindar el servicio el mismo</p>
+                {% else %}
+                <p class="card-subtitle mb-2 text-muted">Moroso: No</p>
+                {% endif %}
+                <h6 class="card-subtitle mb-2 text-muted"> Fecha Inicio: {{pase.fechainicio}}</h6>
+                <h6 class="card-subtitle mb-2 text-muted"> Vence: {{pase.fechafin}}</h6>
+                <p class="card-subtitle mb-2 text-muted">{{pase.movimiento}}</p>
+                <p class="card-subtitle mb-2 text-muted"> Creado por: {{get_user(pase.idUsuario).nombre}} </p>                
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% endblock %}
