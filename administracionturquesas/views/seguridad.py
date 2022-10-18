@@ -25,7 +25,7 @@ def index():
 def verVisitantes():
     if g.user and g.user.esSeguridad:
         today = date.today()
-        
+
         if request.method == 'POST':
             casa = request.form.get('vivienda')
             priv = request.form.get('privada')
@@ -103,7 +103,7 @@ def verVisitantes():
 def verProveedores():
     if g.user and g.user.esSeguridad:
         today = date.today()
-        
+
         if request.method == 'POST':
             casa = request.form.get('vivienda')
             priv = request.form.get('privada')
@@ -182,7 +182,7 @@ def verProveedores():
 def verPasesES():
     if g.user and g.user.esSeguridad:
         today = date.today()
-        
+
         if request.method == 'POST':
             casa = request.form.get('vivienda')
             priv = request.form.get('privada')
@@ -260,14 +260,14 @@ def verPasesES():
 
 
 def get_user(id):
-    user = Usuario.query.get_or_404(id)
+    user = Usuario.query.filter_by(id = id).first()
     return user
 
 # Obtner privada
 
 
 def get_privada(id):
-    privada = Privada.query.get_or_404(id)
+    privada = Privada.query.filter_by(id = id).first()
     return privada
 
 

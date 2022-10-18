@@ -23,7 +23,7 @@ def index():
     return render_template('admin/index.html')
 
 @admin.route("/registraradministradores", methods=('GET', 'POST'))
-def registrarAdministradores():    
+def registrarAdministradores():
     if request.method == 'POST':
         moroso = False
         administrador = False
@@ -36,39 +36,39 @@ def registrarAdministradores():
         vivienda = request.form.get('vivienda')
         email = request.form.get('email')
         calle = request.form.get('calle')
-        tipousuario = request.form.get('tipousuario')    
-        privada = request.form.get('privada')      
+        tipousuario = request.form.get('tipousuario')
+        privada = request.form.get('privada')
 
         if privada == 'privada':
-            flash('Favor de seleccionar una privada')        
+            flash('Favor de seleccionar una privada')
             return render_template('auth/administrador.html')
 
         if calle is None:
             calle = 0
         if email is None:
             email = ''
-        
+
         if tipousuario == 'seguridad':
             administrador = False
             seguridad = True
         elif tipousuario == 'administrador':
             administrador = True
 
-        userToAdd = Usuario.query.get_or_404(telefono=telefono).first()
+        userToAdd = Usuario.query.filter_by(telefono=telefono).first()
         if userToAdd is None:
             user = Usuario(nombrePropietario, password, telefono, esPrimeraVez,
                        administrador, moroso, seguridad, calle, privada, vivienda, email)
             db.session.add(user)
             db.session.commit()
             flash('Usuario agregado')
-           
+
         else:
             flash('El numero telefonico ya existe en la base de datos')
-        
-        
+
+
         return render_template('auth/administrador.html')
     else:
-        if g.user:            
+        if g.user:
             return render_template('auth/administrador.html')
         else:
             return render_template('admin/index.html')
@@ -104,8 +104,8 @@ def registrarUsuario():
             seguridad = True
         elif tipousuario == 'administrador':
             administrador = True
-        
-        userToAdd = Usuario.query.get_or_404(telefono=telefono).first()
+
+        userToAdd = Usuario.query.filter_by(telefono=telefono).first()
         if userToAdd is None:
             user = Usuario(nombrePropietario, password, telefono, esPrimeraVez,
                         administrador, moroso, seguridad, calle, g.user.idPrivada, vivienda, email)
@@ -114,7 +114,7 @@ def registrarUsuario():
             flash('Usuario agregado')
         else:
             flash('El numero telefonico ya existe en la base de datos')
-        
+
         return render_template('admin/registrarusuario.html', privada=privada)
     else:
         if g.user and g.user.esAdministrador:
@@ -177,6 +177,7 @@ def verPase():
 
         privada = Privada.query.filter_by(id=g.user.idPrivada).first()
 
+
         strsql = "select * from pasees where idPrivada = {} and (fechainicio >= '{}' or fechafin <= '{}')".format(
             str(g.user.idPrivada), today, todayAfter)
 
@@ -197,14 +198,14 @@ def verUsuarios():
         privada = Privada.query.filter_by(id=g.user.idPrivada).first()
         if request.method == 'POST':
             casa =  request.form.get('vivienda')
-                  
+
             if not casa.isdigit():
                 usuarios = Usuario.query.filter_by(idPrivada=g.user.idPrivada).all()
                 return render_template('admin/verusuarios.html', usuarios=usuarios, privada=privada, get_user=get_user, get_calle = get_calle)
             else:
                 usuarios = Usuario.query.filter_by(idPrivada=g.user.idPrivada).filter_by(vivienda = casa).all()
                 return render_template('admin/verusuarios.html', usuarios=usuarios, privada=privada, get_user=get_user, get_calle = get_calle)
-        else:           
+        else:
             usuarios = Usuario.query.filter_by(idPrivada=g.user.idPrivada).all()
             return render_template('admin/verusuarios.html', usuarios=usuarios, privada=privada, get_user=get_user, get_calle = get_calle)
     else:
@@ -264,8 +265,8 @@ def actualizarUsuario(id):
             administrador = False
             seguridad = False
 
-            nombrePropietario = request.form.get('nombre')            
-            telefono = request.form.get('telefono')            
+            nombrePropietario = request.form.get('nombre')
+            telefono = request.form.get('telefono')
             vivienda = request.form.get('vivienda')
             email = request.form.get('email')
             calle = request.form.get('calle')
@@ -312,7 +313,7 @@ def eliminarPase(id):
         db.session.delete(pase)
         db.session.commit()
 
-        return  redirect(url_for('admin.verPase'))        
+        return  redirect(url_for('admin.verPase'))
 
     else:
         return render_template('admin/index.html')
@@ -325,7 +326,7 @@ def eliminarUsuario(id):
         db.session.delete(usuario)
         db.session.commit()
 
-        return  redirect(url_for('admin.verUsuarios'))        
+        return  redirect(url_for('admin.verUsuarios'))
 
     else:
         return render_template('admin/index.html')
@@ -338,7 +339,7 @@ def resetearPass(id):
         privada = Privada.query.filter_by(id=g.user.idPrivada).first()
 
         if request.method == 'POST':
-                  
+
             usuario.esPrimeraVez = True
             usuario.password = generate_password_hash("123456")
             db.session.add(usuario)
@@ -346,15 +347,15 @@ def resetearPass(id):
             flash('Password reseteado')
             privada = Privada.query.filter_by(id=g.user.idPrivada).first()
             Usuario.query.filter_by(id=id).first()
-            return render_template('admin/resetearpassword.html', usuario=usuario, privada=privada)            
+            return render_template('admin/resetearpassword.html', usuario=usuario, privada=privada)
         else:
             return render_template('admin/resetearpassword.html', usuario=usuario, privada=privada)
     else:
-        return render_template('admin/index.html')        
+        return render_template('admin/index.html')
 
 # Obtner un ususario
 def get_user(id):
-    user = Usuario.query.get_or_404(id)
+    user = Usuario.query.filter_by(id = id).first()
     return user
 
 def get_calle(id):

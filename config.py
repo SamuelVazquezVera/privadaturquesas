@@ -8,6 +8,8 @@ class Config:
 
 class ProductionConfig(Config):
     DEBUG = False
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://samuelvazquezver:Pr1vadasTurq3sas@samuelvazquezvera.mysql.pythonanywhere-services.com/samuelvazquezver$privadasturquesas"
+    SECRET_KEY = 'configproduccion'
 
 class DevelopmentConfig(Config):
     SECRET_KEY = 'dev'

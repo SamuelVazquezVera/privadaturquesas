@@ -197,7 +197,7 @@ def verVisitas():
         return render_template('resident/vervisitas.html', visitas=lista, privada=privada, get_user=get_user, get_calle = get_calle)
     else:
         return redirect(url_for('admin.index'))
-        
+
 @resident.route("/verproveedores")
 def verProveedores():
     if g.user:
@@ -234,11 +234,11 @@ def verProveedores():
             lista.append(visita)
         return render_template('resident/verproveedores.html', proveedores=lista, privada=privada, get_user=get_user, get_calle = get_calle)
     else:
-        return redirect(url_for('admin.index'))        
+        return redirect(url_for('admin.index'))
 
 # Obtner un ususario
 def get_user(id):
-    user = Usuario.query.get_or_404(id)
+    user = Usuario.query.filter_by(id = id).first()
     return user
 
 def get_calle(id):

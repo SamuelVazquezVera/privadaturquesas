@@ -1,4 +1,3 @@
-from subprocess import call
 from administracionturquesas import db
 
 
@@ -19,7 +18,7 @@ class Visita:
 
     def __init__(self, id, nombre, idPrivada, calle, vivienda, idUsuario, fechainicio, fechafin):
         self.id = id
-        self.nombre = nombre	
+        self.nombre = nombre
         self.idPrivada = idPrivada
         self.calle = calle
         self.vivienda = vivienda
@@ -27,6 +26,11 @@ class Visita:
         self.fechainicio = fechainicio
         self.fechafin = fechafin
 
+class Priv:
+
+    def __init__(self, id, nombre):
+        self.id = id
+        self.nombre = nombre
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'
@@ -116,9 +120,9 @@ class VisitaProveedor(db.Model):
     calle = db.Column(db.Integer, nullable=False)
     vivienda = db.Column(db.Integer, nullable=False)
     idUsuario = db.Column(db.Integer, db.ForeignKey(
-        'usuario.id'), nullable=False)    
+        'usuario.id'), nullable=False)
     fechainicio = db.Column(db.Date, nullable=False)
-    fechafin = db.Column(db.Date, nullable=False)  
+    fechafin = db.Column(db.Date, nullable=False)
     esProveedor = db.Column(db.Boolean, unique=False, default=False)
 
     privada = db.relationship('Privada')
@@ -127,7 +131,7 @@ class VisitaProveedor(db.Model):
     def __init__(self, nombre, idPrivada, vivienda, fechainicio, fechafin, calle, idusuario, esProveedor) -> None:
         self.nombre = nombre
         self.idPrivada = idPrivada
-        self.vivienda = vivienda        
+        self.vivienda = vivienda
         self.fechainicio = fechainicio
         self.fechafin = fechafin
         self.calle = calle
