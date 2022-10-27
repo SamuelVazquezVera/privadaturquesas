@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 0; right: 0;"
+    data-delay="2000" data-autohide="true">
+    <div class="toast-header">
+        <strong class="me-auto" style="color: red ">Notificación</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+
+        </button>
+    </div>
+    <div class="toast-body">
+        <strong>
+            {{message}}
+        </strong>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="container ">
+    <form class="row g-4 mt-4 border" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="col-6">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" maxlength="200"
+                minlength="3" autocomplete="off" style="text-align:center" autofocus required>
+        </div>
+        <div class="col-6">
+            <label for="telefono" class="form-label">Telefono</label>
+            <input type="text" name="telefono" id="telefono" placeholder="Telefono" class="form-control" maxlength="10"
+                minlength="10" autocomplete="off" style="text-align:center" autofocus required
+                onkeypress="return valideKey(event);">
+        </div>
+
+        <div class="form-group">
+            <select id="privada" name="privada" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <option selected>privada</option>
+                <option value="1">Privada Central</option>
+                <option value="2">Ontario</option>
+                <option value="3">Maracaibo</option>
+                <option value="4">Baikal</option>
+                <option value="5">Michigan</option>
+                <option value="6">Chad</option>
+                <option value="7">Sayula</option>
+                <option value="8">Zirahuen</option>
+                <option value="9">Huron</option>
+                <option value="10">Victoria</option>
+                <option value="11">Del Carmen</option>
+                <option value="12">Miramar</option>
+                <option value="13">La Joya</option>
+                <option value="14">Bacalar</option>
+                <option value="15">Coyuca</option>
+                <option value="16">Nichupte</option>
+                <option value="17">Caseta de Seguridad</option>
+              </select>
+        </div>
+
+        <div class="col-6">
+            <select id="calle" name="calle"  disabled class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <option selected>Calle</option>
+                <option value="1">Agua Grande</option>
+                <option value="2">Chautengo</option>
+                <option value="3">Cuyutlan</option>
+                <option value="4">Mitla</option>
+                <option value="5">Chavel</option>
+                <option value="6">Brizola</option>
+                <option value="7">Yalca</option>
+                <option value="8">Zempoala</option>                        
+              </select>
+        </div> 
+        <div class="col-6">
+            <label for="email">Correo Electronico</label>
+            <input type="email" name="email" class="form-control" id="email" maxlength="200" minlength="3"
+                autocomplete="off" style="text-align:center" autofocus placeholder="nombre@algo.com">
+        </div>
+        <div class="col-6">
+            <label for="vivienda" class="form-label">Vivienda</label>
+            <input type="text" name="vivienda" id="vivienda" placeholder="vivienda" class="form-control" maxlength="2"
+                minlength="1" autocomplete="off" style="text-align:center" autofocus required
+                onkeypress="return valideKey(event);">
+        </div>
+        <div class="col-6">
+            <div class=" form-check col-3">
+                <input class="form-check-input" type="radio" checked name="tipousuario" id="administrador"
+                    value="administrador">
+                <label class="form-check-label" for="administrador">Administrador</label>
+            </div>
+           
+
+            <div class="form-check col-3">
+                <input class="form-check-input" type="radio" name="tipousuario" id="seguridad" value="seguridad">
+                <label class="form-check-label" for="seguridad">Vigilancia</label>
+            </div>         
+        </div>
+        <div>
+            <button class="btn btn-outline-primary g-4 mt-4 ">Registrar</button>
+        </div>
+        <div></div>
+    </form>
+</div>
+
+{% endblock %}

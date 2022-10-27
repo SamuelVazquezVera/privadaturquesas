@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 0; right: 0;"
+    data-delay="2000" data-autohide="true">
+    <div class="toast-header">
+        <strong class="me-auto" style="color: red ">Notificación</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+
+        </button>
+    </div>
+    <div class="toast-body">
+        <strong>
+            {{message}}
+        </strong>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="container ">
+    <form class="row g-4 mt-4 border" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="col-6">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" maxlength="200"
+                minlength="3" autocomplete="off" style="text-align:center" autofocus required>
+        </div>
+        <div class="col-6">
+            <label for="telefono" class="form-label">Telefono</label>
+            <input type="text" name="telefono" id="telefono" placeholder="Telefono" class="form-control" maxlength="10"
+                minlength="10" autocomplete="off" style="text-align:center" autofocus required
+                onkeypress="return valideKey(event);">
+        </div>
+        {% if g.user.idPrivada == 1 %}
+        <div class="col-6">
+            <label for="calle" class="form-label">Calle</label>
+            <input type="text" name="calle" id="calle" placeholder="Calle" class="form-control" maxlength="200"
+                autocomplete="off" style="text-align:center" autofocus>
+        </div>
+        {% endif %}
+        <div class="col-6">
+            <label for="nombrePrivada" class="form-label">Privada</label>
+            <input type="text" name="nombrePrivada" id="nombrePrivada" class="form-control" style="text-align:center"
+                value="{{privada.nombre}}" disabled>
+        </div>
+        <div class="col-6">
+            <label for="email">Correo Electronico</label>
+            <input type="email" name="email" class="form-control" id="email" maxlength="200" minlength="3"
+                autocomplete="off" style="text-align:center" autofocus placeholder="nombre@algo.com">
+        </div>
+        <div class="col-6">
+            <label for="vivienda" class="form-label">Vivienda</label>
+            <input type="text" name="vivienda" id="vivienda" placeholder="vivienda" class="form-control" maxlength="2"
+                minlength="1" autocomplete="off" style="text-align:center" autofocus required
+                onkeypress="return valideKey(event);">
+        </div>
+        <div class="col-6">
+            <div class=" form-check col-3">
+                <input class="form-check-input" type="radio" name="tipousuario" id="administrador"
+                    value="administrador">
+                <label class="form-check-label" for="administrador">Administrador</label>
+            </div>
+            <div class="form-check col-3">
+                <input class="form-check-input" type="radio" name="tipousuario" id="residente" value="residente"
+                    checked>
+                <label class="form-check-label" for="residente">Residente</label>
+            </div>
+            {% if g.user.idPrivada == 17 %}
+            <div class="form-check col-3">
+                <input class="form-check-input" type="radio" name="tipousuario" id="seguridad" value="seguridad">
+                <label class="form-check-label" for="seguridad">Vigilancia</label>
+            </div>
+            {% endif %}
+            <div class="form-check col-3">
+                <input class="form-check-input" type="checkbox" name = "moroso" id="moroso" value="moroso">
+                <label class="form-check-label" for="moroso">Moroso</label>
+            </div>            
+        </div>
+        <div>
+            <button class="btn btn-outline-primary g-4 mt-4 ">Registrar</button>
+        </div>
+        <div></div>
+    </form>
+</div>
+
+{% endblock %}
